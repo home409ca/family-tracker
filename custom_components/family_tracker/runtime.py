@@ -29,6 +29,12 @@ class Manager:
 
     async def load(self):
         self.state = State(await self.store.async_load(), self.store.async_save)
+        for device_id in self.state.data.get("removed", {}):
+            self.remove_from_registry(device_id)
+
+    async def unpair(self, device_id, token):
+        await self.state.unpair(device_id, token)
+        self.remove_from_registry(device_id)
 
     @property
     def add_signal(self):

@@ -76,7 +76,7 @@ class FamilyTrackerConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             step_id=step,
             data_schema=schema,
             errors=errors,
-            description_placeholders=apk_download_placeholders(self.hass),
+            description_placeholders=apk_download_placeholders(local=step == "reconfigure"),
         )
 
 
@@ -110,7 +110,7 @@ class PairingOptions(config_entries.OptionsFlow):
                 probatio.Required("name"): NAME,
                 probatio.Required("interval_minutes", default=DEFAULT_INTERVAL): INTERVAL,
             }),
-            description_placeholders=apk_download_placeholders(self.hass),
+            description_placeholders=apk_download_placeholders(local=True),
         )
 
     async def async_step_download(self, user_input=None):

@@ -5,14 +5,16 @@ from pathlib import Path
 from aiohttp import web
 
 from homeassistant.components.http import HomeAssistantView
-from homeassistant.core import callback
 
-from .const import API_PATH, DOMAIN
+from .const import API_PATH
 
-DOWNLOAD_URL = "https://github.com/home409ca/family-tracker/releases/latest"
+DOWNLOAD_URL = "https://github.com/home409ca/family-tracker/releases/latest/download/FamilyTracker.apk"
 QR_PATH = API_PATH + "/download/apk-qr.png"
 QR_FILE = Path(__file__).with_name("brand") / "download-apk-qr.png"
-REGISTERED = f"{DOMAIN}_apk_qr_view_registered"
+HOSTED_QR = (
+    "https://raw.githubusercontent.com/home409ca/family-tracker/HEAD/"
+    "custom_components/family_tracker/brand/download-apk-qr.png"
+)
 
 
 class ApkQrView(HomeAssistantView):
@@ -24,10 +26,6 @@ class ApkQrView(HomeAssistantView):
         return web.FileResponse(QR_FILE, headers={"Cache-Control": "public, max-age=3600"})
 
 
-@callback
-def apk_download_placeholders(hass):
-    """Register the image even when the first config entry is still being created."""
-    if not hass.data.get(REGISTERED):
-        hass.http.register_view(ApkQrView)
-        hass.data[REGISTERED] = True
-    return {"apk_download_url": DOWNLOAD_URL, "apk_qr_url": QR_PATH}
+def apk_download_placeholders(*, local):
+    """Supply the public image independently of the setup lifecycle."""
+    return {"apk_download_url": DOWNLOAD_URL, "apk_qr_url": QR_PATH if local else HOSTED_QR}

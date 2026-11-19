@@ -16,6 +16,7 @@ PAIR_TTL = 300
 COMMAND_HISTORY = 86_400
 MAX_COMMANDS = 128
 MAX_DEVICES = 64
+UNPAIR_RETRY_TTL = 86_400
 TERMINAL = {"applied", "report_accepted", "failed", "report_accepted_late"}
 
 
@@ -90,6 +91,43 @@ class State:
     def authenticate(self, device_id, token):
         self._authenticate(self.data, device_id, token)
 
+    def _authenticate_unpair(self, data, device_id, token, now):
+        if device_id in data["devices"]:
+            return self._authenticate(data, device_id, token)
+        receipt = data.get("removed", {}).get(device_id)
+        expected = receipt["token_hash"] if receipt and receipt["expires"] > now else None
+        if not compare_digest(digest(token), expected or ("0" * 64)) or not expected:
+            raise ProtocolError(401, "invalid_credentials")
+        return None
+
+    def authenticate_unpair(self, device_id, token):
+        self._authenticate_unpair(self.data, device_id, token, self._now())
+
+    @staticmethod
+    def _remove_device(data, device_id, now):
+        token_hash = data["devices"][device_id]["token_hash"]
+        data["pairs"] = {
+            key: pair for key, pair in data["pairs"].items() if pair["device_id"] != device_id
+        }
+        del data["devices"][device_id]
+        if token_hash:
+            receipts = {
+                key: receipt for key, receipt in data.get("removed", {}).items() if receipt["expires"] > now
+            }
+            if len(receipts) >= MAX_DEVICES * 2:
+                del receipts[next(iter(receipts))]
+            receipts[device_id] = {"token_hash": token_hash, "expires": now + UNPAIR_RETRY_TTL}
+            data["removed"] = receipts
+
+    async def unpair(self, device_id, token):
+        def apply(data, now):
+            device = self._authenticate_unpair(data, device_id, token, now)
+            if device is None:
+                return
+            self._remove_device(data, device_id, now)
+
+        await self.change(apply)
+
     async def issue_pair(self, name, interval, device_id=None):
         code = token_urlsafe(32)
 
@@ -141,12 +179,12 @@ class State:
             if operation == "rename":
                 device["name"] = name
                 return
-            data["pairs"] = {
-                key: pair for key, pair in data["pairs"].items() if pair["device_id"] != device_id
-            }
             if operation == "remove":
-                del data["devices"][device_id]
+                self._remove_device(data, device_id, now)
             else:
+                data["pairs"] = {
+                    key: pair for key, pair in data["pairs"].items() if pair["device_id"] != device_id
+                }
                 device.update(token_hash=None, fcm_token=None, commands={})
 
         await self.change(apply)

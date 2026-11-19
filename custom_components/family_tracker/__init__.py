@@ -4,11 +4,13 @@ from .const import DOMAIN
 
 
 async def async_setup(hass, config):
+    from .apk_download import ApkQrView
     from .http import DeviceView, PairingQrView
     from .services import register_services
 
     hass.http.register_view(DeviceView(hass))
     hass.http.register_view(PairingQrView(hass))
+    hass.http.register_view(ApkQrView())
     register_services(hass)
     return True
 
