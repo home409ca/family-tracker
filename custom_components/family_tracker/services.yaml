@@ -1,0 +1,121 @@
+request_location:
+  name: "Zażądaj lokalizacji"
+  description: "Zleca świeży pomiar GPS."
+  fields:
+    device_id:
+      name: "Identyfikator telefonu"
+      required: true
+      selector: {"text":{}}
+
+set_temporary_interval:
+  name: "Ustaw tymczasowy interwał"
+  description: "Zmienia interwał raportowania na określony czas."
+  fields:
+    device_id:
+      name: "Identyfikator telefonu"
+      required: true
+      selector: {"text":{}}
+    interval_minutes:
+      name: "Interwał w minutach"
+      required: true
+      selector: {"number":{"min":1,"max":1440,"mode":"box"}}
+    duration_minutes:
+      name: "Czas trwania w minutach"
+      required: true
+      selector: {"number":{"min":1,"max":1440,"mode":"box"}}
+
+set_interval:
+  name: "Ustaw interwał"
+  description: "Zapisuje standardowy interwał raportowania."
+  fields:
+    device_id:
+      name: "Identyfikator telefonu"
+      required: true
+      selector: {"text":{}}
+    interval_minutes:
+      name: "Interwał w minutach"
+      required: true
+      selector: {"number":{"min":1,"max":1440,"mode":"box"}}
+
+reset_interval:
+  name: "Przywróć interwał"
+  description: "Usuwa tymczasowy interwał."
+  fields:
+    device_id:
+      name: "Identyfikator telefonu"
+      required: true
+      selector: {"text":{}}
+
+pause_reporting:
+  name: "Wstrzymaj raportowanie"
+  description: "Zleca wstrzymanie raportowania w aplikacji."
+  fields:
+    device_id:
+      name: "Identyfikator telefonu"
+      required: true
+      selector: {"text":{}}
+
+create_pairing:
+  name: "Utwórz kod parowania"
+  description: "Tworzy kod ważny przez pięć minut."
+  fields:
+    device_id:
+      name: "Identyfikator przy ponownym parowaniu"
+      required: false
+      selector: {"text":{}}
+    name:
+      name: "Nazwa nowego telefonu"
+      required: false
+      selector: {"text":{}}
+    interval_minutes:
+      name: "Interwał w minutach"
+      required: false
+      selector: {"number":{"min":1,"max":1440,"mode":"box"}}
+
+list_devices:
+  name: "Pokaż telefony"
+  description: "Zwraca identyfikatory telefonów."
+
+command_status:
+  name: "Sprawdź polecenie"
+  description: "Zwraca stan wskazanego lub najnowszego polecenia."
+  fields:
+    device_id:
+      name: "Identyfikator telefonu"
+      required: true
+      selector: {"text":{}}
+    command_id:
+      name: "Identyfikator polecenia"
+      required: false
+      selector: {"text":{}}
+
+rename_device:
+  name: "Zmień nazwę telefonu"
+  description: "Zachowuje identyfikatory encji."
+  fields:
+    device_id:
+      name: "Identyfikator telefonu"
+      required: true
+      selector: {"text":{}}
+    name:
+      name: "Nowa nazwa"
+      required: true
+      selector: {"text":{}}
+
+revoke_device:
+  name: "Unieważnij dostęp"
+  description: "Odcina token telefonu."
+  fields:
+    device_id:
+      name: "Identyfikator telefonu"
+      required: true
+      selector: {"text":{}}
+
+remove_device:
+  name: "Usuń telefon"
+  description: "Usuwa telefon i jego encje z integracji."
+  fields:
+    device_id:
+      name: "Identyfikator telefonu"
+      required: true
+      selector: {"text":{}}

@@ -1,0 +1,13 @@
+{
+  "domain": "family_tracker",
+  "name": "Family Tracker",
+  "version": "0.2.1",
+  "config_flow": true,
+  "dependencies": ["http", "zone"],
+  "documentation": "https://github.com/home409ca/family-tracker",
+  "issue_tracker": "https://github.com/home409ca/family-tracker/issues",
+  "codeowners": ["@home409ca"],
+  "integration_type": "hub",
+  "iot_class": "local_push",
+  "requirements": ["google-auth[requests]==2.62.2", "qrcode[pil]==8.2"]
+}

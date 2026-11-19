@@ -1,0 +1,56 @@
+{
+  "options": {
+    "step": {
+      "init": {
+        "title": "Add a phone",
+        "description": "Scan the code with your phone camera and download the APK from the latest GitHub release.\n\n![QR code to download the APK]({apk_qr_url})\n\n[Download the APK from GitHub]({apk_download_url})\n\nAfter installing the app, name the phone to create a separate pairing code.",
+        "data": {
+          "name": "Phone name",
+          "interval_minutes": "Default interval in minutes"
+        }
+      },
+      "download": {
+        "title": "Pairing code ready",
+        "description": "[Download QR code (PNG)]({qr_url}). Open the image on your computer and scan it with Family Tracker. Manual code: `{code}`. The download link works once and the code is valid for five minutes."
+      }
+    },
+    "error": {
+      "pairing_unavailable": "Could not create a pairing code right now."
+    },
+    "abort": {
+      "unavailable": "Family Tracker is unavailable.",
+      "unauthorized": "Administrator access is required to create a pairing code."
+    }
+  },
+  "config": {
+    "step": {
+      "user": {
+        "title": "Family Tracker",
+        "data": {
+          "server_url": "Public Home Assistant HTTPS URL",
+          "project_id": "Firebase project ID (optional)",
+          "timeout": "Command timeout in seconds"
+        },
+        "description": "Scan the code with your phone camera and download the APK from the latest GitHub release.\n\n![QR code to download the APK]({apk_qr_url})\n\n[Download the APK from GitHub]({apk_download_url})"
+      },
+      "reconfigure": {
+        "title": "Family Tracker",
+        "data": {
+          "server_url": "Public Home Assistant HTTPS URL",
+          "project_id": "Firebase project ID (optional)",
+          "timeout": "Command timeout in seconds"
+        },
+        "description": "Scan the code with your phone camera and download the APK from the latest GitHub release.\n\n![QR code to download the APK]({apk_qr_url})\n\n[Download the APK from GitHub]({apk_download_url})"
+      }
+    },
+    "error": {
+      "invalid_url": "Enter an HTTPS origin without a path.",
+      "invalid_project": "Enter a valid Firebase project ID.",
+      "invalid_credentials": "Check the local Firebase credentials file."
+    },
+    "abort": {
+      "already_configured": "Family Tracker is already configured.",
+      "reconfigure_successful": "Configuration saved."
+    }
+  }
+}
