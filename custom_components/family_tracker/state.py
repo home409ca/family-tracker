@@ -3,6 +3,7 @@
 from asyncio import Lock
 from collections import defaultdict, deque
 from copy import deepcopy
+from datetime import datetime
 from hashlib import sha256
 from hmac import compare_digest
 from math import asin, cos, radians, sin, sqrt
@@ -45,6 +46,15 @@ def should_publish(old, new):
 class State:
     def __init__(self, initial, save, now=time):
         self.data = initial if initial is not None else {"devices": {}, "pairs": {}}
+        for device in self.data["devices"].values():
+            if "last_requested_fix" not in device:
+                device["last_requested_fix"] = max(
+                    (datetime.fromisoformat(receipt["received_at"]).timestamp()
+                     for receipt in device.get("reports", {}).values()
+                     if receipt.get("command_status") in ("report_accepted", "report_accepted_late")
+                     and "received_at" in receipt),
+                    default=None,
+                )
         self._save = save
         self._now = now
         self._lock = Lock()
@@ -200,6 +210,19 @@ class State:
             device["fcm_token"] = registration
 
         await self.change(apply)
+
+    async def confirm_push(self, device_id, token, command_id):
+        def apply(data, now):
+            device = self._authenticate(data, device_id, token)
+            command = device["commands"].get(command_id)
+            if command is None or command["push"] not in ("pending", "sent", "transport_error", "retryable_error"):
+                return {"confirmed": False}
+            if "push_confirmed_at" not in command:
+                command["push_confirmed_at"] = now
+                device["last_confirmed_push"] = now
+            return {"confirmed": True}
+
+        return await self.change(apply)
 
     async def create_command(self, device_id, kind, params, timeout):
         command_id = uuid4().hex
@@ -360,6 +383,7 @@ class State:
             if command:
                 command["stage"] = "report_accepted" if now < command["expires"] else "report_accepted_late"
                 result["command_status"] = command["stage"]
+                device["last_requested_fix"] = now
             device["reports"][item["report_id"]] = {**result, "received_at": iso(now)}
             if len(device["reports"]) > 128:
                 del device["reports"][next(iter(device["reports"]))]

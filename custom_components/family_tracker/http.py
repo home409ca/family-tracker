@@ -38,7 +38,7 @@ class DeviceView(HomeAssistantView):
 
     async def _handle(self, manager, request, operation):
         state = manager.state
-        if operation not in ("pair", "report", "commands", "ack", "registration", "unpair"):
+        if operation not in ("pair", "report", "commands", "ack", "registration", "unpair", "push_ack"):
             raise ProtocolError(404, "unknown_operation")
         if request.content_type != "application/json":
             raise ProtocolError(415, "json_required")
@@ -95,6 +95,12 @@ class DeviceView(HomeAssistantView):
             return await state.acknowledge(
                 device_id, token, identifier(payload["command_id"]), payload["stage"], payload.get("error")
             )
+        if operation == "push_ack":
+            fields(payload, ("command_id",))
+            result = await state.confirm_push(device_id, token, identifier(payload["command_id"]))
+            if result["confirmed"]:
+                manager.device_changed(device_id)
+            return result
         fields(payload, ("token",))
         await state.register_push(device_id, token, fcm_token(payload["token"]))
         return {"accepted": True}

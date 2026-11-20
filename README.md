@@ -1,23 +1,34 @@
-# Family Tracker
+# Family Tracker 0.2.5
 
-Aplikacja Android 0.2.2 i integracja Home Assistant 0.2.4.
+Family Tracker przesyła pozycję telefonu z Androidem do Home Assistanta. Opcjonalnie udostępnia poziom baterii, stan ładowania i nazwę sieci Wi-Fi.
 
-## Aktualizacja
+## Instalacja w Home Assistancie
 
-Wgraj zawartość paczki do głównego katalogu publicznego repozytorium `https://github.com/home409ca/family-tracker`. W głównym katalogu gałęzi `main` umieść podpisany plik o nazwie **FamilyTracker.apk**. Zachowaj tę nazwę w kolejnych aktualizacjach. Przycisk **Aktualizuj** pobiera surowy plik z tej gałęzi, sprawdza certyfikat i wersję, a instalację zatwierdzasz w Androidzie. Przejście z APK 0.2.1 wymaga ręcznego zainstalowania APK 0.2.2. Do oznaczenia wersji integracji w HACS możesz opublikować wydanie z tagiem `v0.2.4`.
+1. W HACS otwórz **⋮ → Repozytoria niestandardowe**.
+2. Dodaj `https://github.com/home409ca/family-tracker` w kategorii **Integracja**.
+3. Pobierz Family Tracker i zrestartuj Home Assistant.
+4. Przy pierwszej instalacji wejdź w **Ustawienia → Urządzenia i usługi → Dodaj integrację** i wybierz **Family Tracker**. Przy aktualizacji otwórz istniejący wpis.
 
-W HACS dodaj repozytorium w kategorii **Integracja** i pobierz wersję **0.2.4**. Po restarcie Core otwórz istniejący wpis Family Tracker. Przy instalacji ręcznej skopiuj katalog `custom_components/family_tracker` do konfiguracji HA i zrestartuj Core.
+Instalacja ręczna polega na skopiowaniu folderu `custom_components/family_tracker` do katalogu `custom_components` Home Assistanta i ponownym uruchomieniu HA. Integrację przetestowano na Core 2026.10.4.
 
-## Parowanie
+## Instalacja i parowanie telefonu
 
-W Home Assistant wpisz publiczny adres HTTPS w **Ustawienia → System → Sieć → Adres URL Home Assistanta → Internet**. Family Tracker odczytuje tę wartość przy tworzeniu nowego kodu parowania.
+1. Pobierz i zainstaluj [FamilyTracker.apk](https://github.com/home409ca/family-tracker/blob/main/FamilyTracker.apk). Jeśli masz już Family Tracker z tego repozytorium, zainstaluj APK jako aktualizację, żeby zachować parowanie.
+2. W HA wpisz publiczny adres HTTPS w **Ustawienia → System → Sieć → Adres URL Home Assistanta → Internet**.
+3. Wejdź w **Family Tracker → Konfiguruj**, wpisz nazwę telefonu i zatwierdź. W oknie pojawi się kod QR ważny przez pięć minut.
+4. Otwórz Family Tracker na telefonie i wybierz **Zeskanuj kod QR**. Aplikacja odczyta adres serwera i kod, a następnie spróbuje sparować telefon.
+5. W aplikacji włącz wybrane dane do udostępniania. Dla automatycznego wznowienia lokalizacji po restarcie telefonu ustaw **Dokładna lokalizacja** i **Zawsze zezwalaj** w uprawnieniach Androida.
 
-Otwórz **Ustawienia → Urządzenia i usługi → Family Tracker → Konfiguruj**. Podaj nazwę telefonu, zatwierdź formularz i zostaw wyświetlony kod QR na ekranie. Na telefonie wybierz **Zeskanuj kod QR** w Family Tracker i skieruj aparat na kod. Kod jest jednorazowy i ważny przez 5 minut. Aplikacja odczyta adres HTTPS i kod, po czym od razu spróbuje sparować telefon. QR do instalacji APK jest osobny i wskazuje na [plik w gałęzi main](https://github.com/home409ca/family-tracker/blob/main/FamilyTracker.apk).
+## Lokalizacja na żądanie i Firebase
 
-## Lokalizacja na żądanie
+Na stronie telefonu w Home Assistancie wybierz **Poproś o aktualną lokalizację**. Bez Firebase telefon odbierze polecenie przy synchronizacji, jeśli jest ono nadal ważne. Z Firebase telefon może dostać sygnał również przy zablokowanym ekranie.
 
-W Home Assistant otwórz stronę sparowanego telefonu i kliknij **Poproś o aktualną lokalizację**. Do wysłania polecenia przyciskiem potrzebujesz konta administratora. Bez Firebase telefon odbierze polecenie przy najbliższej synchronizacji, o ile polecenie jeszcze nie wygasło. Przy skonfigurowanym Firebase Cloud Messaging telefon może dostać sygnał od razu, także przy zablokowanym ekranie. Aplikacja potrzebuje włączonego udostępniania, dostępu do dokładnej lokalizacji i możliwości odczytu GPS.
+Dołączona APK zawiera konfigurację klienta FCM dla projektu właściciela repozytorium. Aby uruchomić FCM, umieść klucz JSON konta usługi tego projektu w `.storage/family_tracker_fcm.json` w katalogu konfiguracji HA. Następnie wpisz identyfikator tego samego projektu w **Family Tracker → ⋮ → Konfiguruj ponownie**. Prywatny klucz konta usługi przechowuj w Home Assistancie.
 
-## Rozparowanie
+- **Ostatni sygnał Firebase** w aplikacji pokazuje czas odebrania sygnału FCM.
+- **Ostatnie potwierdzenie Firebase** w diagnostyce telefonu w HA pokazuje czas, kiedy HA otrzymał potwierdzenie z telefonu.
+- **Ostatnia lokalizacja na żądanie** w tej samej sekcji pokazuje czas odbioru pomiaru GPS wykonanego na żądanie.
 
-Przycisk **Rozparuj telefon** zatrzymuje udostępnianie i usuwa z HA bieżące urządzenie oraz jego encje po potwierdzeniu przez serwer.
+## Aktualizacje APK
+
+Przycisk **Aktualizuj** w aplikacji sprawdza plik `FamilyTracker.apk` w głównym katalogu gałęzi `main`. Kolejne wydania APK zachowują tę nazwę i podpis. Instalację aktualizacji zatwierdzasz na telefonie.

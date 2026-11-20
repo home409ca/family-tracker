@@ -1,5 +1,9 @@
 {
   "entity": {
+    "sensor": {
+      "last_requested_fix": { "name": "Ostatnia lokalizacja na żądanie" },
+      "last_confirmed_push": { "name": "Ostatnie potwierdzenie Firebase" }
+    },
     "button": {
       "request_location": {
         "name": "Poproś o aktualną lokalizację"

@@ -1,4 +1,4 @@
-"""Battery and last contact sensors."""
+"""Battery, connectivity and request confirmation sensors."""
 
 from homeassistant.components.sensor import SensorDeviceClass, SensorEntity, SensorStateClass
 from homeassistant.const import PERCENTAGE, EntityCategory
@@ -7,7 +7,7 @@ from .entity import FamilyEntity, add_devices, utc
 
 
 async def async_setup_entry(hass, entry, async_add_entities):
-    add_devices(hass, entry, async_add_entities, (Battery, LastContact, Wifi))
+    add_devices(hass, entry, async_add_entities, (Battery, LastContact, Wifi, LastRequestedFix, LastConfirmedPush))
 
 
 class Battery(FamilyEntity, SensorEntity):
@@ -26,16 +26,31 @@ class Battery(FamilyEntity, SensorEntity):
         return self.current[0]
 
 
-class LastContact(FamilyEntity, SensorEntity):
-    _attr_name = "Last update"
+class DiagnosticTimestamp(FamilyEntity, SensorEntity):
     _attr_device_class = SensorDeviceClass.TIMESTAMP
     _attr_entity_category = EntityCategory.DIAGNOSTIC
-    suffix = "last_update"
-    keys = ("published_contact",)
 
     @property
     def native_value(self):
         return utc(self.current[0]) if self.current[0] is not None else None
+
+
+class LastContact(DiagnosticTimestamp):
+    _attr_name = "Last update"
+    suffix = "last_update"
+    keys = ("published_contact",)
+
+
+class LastRequestedFix(DiagnosticTimestamp):
+    _attr_translation_key = "last_requested_fix"
+    suffix = "last_requested_fix"
+    keys = ("last_requested_fix",)
+
+
+class LastConfirmedPush(DiagnosticTimestamp):
+    _attr_translation_key = "last_confirmed_push"
+    suffix = "last_confirmed_push"
+    keys = ("last_confirmed_push",)
 
 
 class Wifi(FamilyEntity, SensorEntity):

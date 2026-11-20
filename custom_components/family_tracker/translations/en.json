@@ -1,5 +1,9 @@
 {
   "entity": {
+    "sensor": {
+      "last_requested_fix": { "name": "Last location received on request" },
+      "last_confirmed_push": { "name": "Last Firebase delivery confirmed" }
+    },
     "button": {
       "request_location": {
         "name": "Request current location"
