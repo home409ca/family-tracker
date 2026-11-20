@@ -10,6 +10,7 @@ from homeassistant.helpers.service import async_register_admin_service
 
 from .const import DEFAULT_INTERVAL, DOMAIN
 from .protocol import IDENTIFIER, ProtocolError
+from .server_url import public_server_url
 from .state import MAX_DEVICES
 
 SERVICE_ID = probatio.All(str, probatio.Match(IDENTIFIER.pattern + "$"))
@@ -70,10 +71,12 @@ def register_services(hass):
         device_id = data.get("device_id")
         if not device_id and "name" not in data:
             raise ServiceValidationError("Name is required for a new device")
+        server = public_server_url(manager.hass.config)
+        if server is None:
+            raise ServiceValidationError("Set the Home Assistant Internet URL to a public HTTPS origin")
         pair = await manager.state.issue_pair(
             data.get("name"), data["interval_minutes"], device_id
         )
-        server = manager.entry.data["server_url"]
         return {
             **pair,
             "server_url": server,

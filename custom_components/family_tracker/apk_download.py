@@ -8,7 +8,7 @@ from homeassistant.components.http import HomeAssistantView
 
 from .const import API_PATH
 
-DOWNLOAD_URL = "https://github.com/home409ca/family-tracker/releases/latest/download/FamilyTracker.apk"
+DOWNLOAD_URL = "https://github.com/home409ca/family-tracker/blob/main/FamilyTracker.apk"
 QR_PATH = API_PATH + "/download/apk-qr.png"
 QR_FILE = Path(__file__).with_name("brand") / "download-apk-qr.png"
 HOSTED_QR = (

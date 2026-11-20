@@ -3,7 +3,7 @@
     "step": {
       "init": {
         "title": "Dodaj telefon",
-        "description": "Zeskanuj kod aparatem telefonu i pobierz APK z najnowszego wydania GitHub.\n\n![Kod QR do pobrania APK]({apk_qr_url})\n\n[Pobierz APK na GitHubie]({apk_download_url})\n\nPo zainstalowaniu aplikacji nadaj telefonowi nazwę, aby wygenerować osobny kod parowania.",
+        "description": "Zeskanuj kod aparatem telefonu i pobierz APK z repozytorium GitHub.\n\n![Kod QR do pobrania APK]({apk_qr_url})\n\n[Pobierz APK na GitHubie]({apk_download_url})\n\nPo zainstalowaniu aplikacji nadaj telefonowi nazwę, aby wygenerować osobny kod parowania.\n\nAdres z ustawień HA: `{server_url}`.",
         "data": {
           "name": "Nazwa telefonu",
           "interval_minutes": "Domyślny interwał w minutach"
@@ -15,11 +15,14 @@
       }
     },
     "error": {
-      "pairing_unavailable": "Nie udało się teraz utworzyć kodu parowania."
+      "pairing_unavailable": "Nie udało się teraz utworzyć kodu parowania.",
+      "invalid_name": "Wpisz nazwę od 1 do 64 znaków.",
+      "invalid_interval": "Wpisz pełną liczbę minut od 1 do 1440."
     },
     "abort": {
       "unavailable": "Family Tracker nie jest dostępny.",
-      "unauthorized": "Do utworzenia kodu wymagane są uprawnienia administratora."
+      "unauthorized": "Do utworzenia kodu wymagane są uprawnienia administratora.",
+      "public_url_required": "Ustaw publiczny adres HTTPS w Ustawienia → System → Sieć → Adres URL Home Assistanta → Internet."
     }
   },
   "config": {
@@ -27,30 +30,28 @@
       "user": {
         "title": "Family Tracker",
         "data": {
-          "server_url": "Publiczny adres HTTPS Home Assistant",
           "project_id": "Identyfikator projektu Firebase (opcjonalny)",
           "timeout": "Czas oczekiwania na polecenie w sekundach"
         },
-        "description": "Zeskanuj kod aparatem telefonu i pobierz APK z najnowszego wydania GitHub.\n\n![Kod QR do pobrania APK]({apk_qr_url})\n\n[Pobierz APK na GitHubie]({apk_download_url})"
+        "description": "Zeskanuj kod aparatem telefonu i pobierz APK z repozytorium GitHub.\n\n![Kod QR do pobrania APK]({apk_qr_url})\n\n[Pobierz APK na GitHubie]({apk_download_url})\n\nAdres z ustawień HA: `{server_url}`."
       },
       "reconfigure": {
         "title": "Family Tracker",
         "data": {
-          "server_url": "Publiczny adres HTTPS Home Assistant",
           "project_id": "Identyfikator projektu Firebase (opcjonalny)",
           "timeout": "Czas oczekiwania na polecenie w sekundach"
         },
-        "description": "Zeskanuj kod aparatem telefonu i pobierz APK z najnowszego wydania GitHub.\n\n![Kod QR do pobrania APK]({apk_qr_url})\n\n[Pobierz APK na GitHubie]({apk_download_url})"
+        "description": "Zeskanuj kod aparatem telefonu i pobierz APK z repozytorium GitHub.\n\n![Kod QR do pobrania APK]({apk_qr_url})\n\n[Pobierz APK na GitHubie]({apk_download_url})\n\nAdres z ustawień HA: `{server_url}`.\n\nAby sparować telefon, otwórz Family Tracker i wybierz Konfiguruj."
       }
     },
     "error": {
-      "invalid_url": "Podaj adres HTTPS bez dodatkowej ścieżki.",
       "invalid_project": "Podaj właściwy identyfikator projektu Firebase.",
       "invalid_credentials": "Sprawdź lokalny plik poświadczeń Firebase."
     },
     "abort": {
       "already_configured": "Family Tracker jest już skonfigurowany.",
-      "reconfigure_successful": "Zapisano konfigurację."
+      "reconfigure_successful": "Zapisano konfigurację.",
+      "public_url_required": "Ustaw publiczny adres HTTPS w Ustawienia → System → Sieć → Adres URL Home Assistanta → Internet."
     }
   }
 }

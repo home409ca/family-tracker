@@ -1,21 +1,19 @@
 # Family Tracker
 
-Aplikacja Android 0.2.1 i integracja Home Assistant 0.2.2. Family Tracker przesyła lokalizację i stan baterii telefonu. Nazwę Wi-Fi (SSID) można udostępnić osobno.
+Aplikacja Android 0.2.2 i integracja Home Assistant 0.2.3.
 
-## Aktualizacja integracji HA
+## Aktualizacja
 
-Dodaj `https://github.com/home409ca/family-tracker` w HACS jako własne repozytorium typu **Integracja**. Pobierz Family Tracker **0.2.2** i zrestartuj Home Assistant Core. Przy instalacji ręcznej skopiuj katalog `custom_components/family_tracker` do konfiguracji HA. Przy aktualizacji zachowaj istniejący wpis integracji oraz ustawienia telefonu.
+Wgraj zawartość paczki do głównego katalogu publicznego repozytorium `https://github.com/home409ca/family-tracker`. W głównym katalogu gałęzi `main` umieść podpisany plik o nazwie **FamilyTracker.apk**. Zachowaj tę nazwę w kolejnych aktualizacjach. Przycisk **Aktualizuj** pobiera surowy plik z tej gałęzi, sprawdza certyfikat i wersję, a instalację zatwierdzasz w Androidzie. Przejście z APK 0.2.1 wymaga ręcznego zainstalowania APK 0.2.2. Do oznaczenia wersji integracji w HACS możesz opublikować wydanie z tagiem `v0.2.3`.
 
-## Pobranie i parowanie
+W HACS dodaj repozytorium w kategorii **Integracja** i pobierz wersję **0.2.3**. Po restarcie Core otwórz istniejący wpis Family Tracker. Przy instalacji ręcznej skopiuj katalog `custom_components/family_tracker` do konfiguracji HA i zrestartuj Core.
 
-Zainstaluj [FamilyTracker.apk](FamilyTracker.apk) lub zeskanuj QR do pobrania APK w **Ustawienia → Urządzenia i usługi → Family Tracker → Konfiguruj**. Kod prowadzi do [pobrania APK z ostatniego wydania](https://github.com/home409ca/family-tracker/releases/latest/download/FamilyTracker.apk). W tym samym formularzu możesz wygenerować jednorazowy QR parowania, który skanujesz w aplikacji Family Tracker.
+## Parowanie
 
-## Aktualizacje z aplikacji
+W Home Assistant wpisz publiczny adres HTTPS w **Ustawienia → System → Sieć → Adres URL Home Assistanta → Internet**. Family Tracker odczytuje tę wartość przy tworzeniu nowego kodu parowania.
 
-Przycisk **Aktualizuj** jest dostępny również na ekranie parowania. Aplikacja pobiera nowsze wydanie i sprawdza identyfikator aplikacji oraz podpis. Instalację zatwierdzasz w Androidzie. Przy pierwszym użyciu Android może poprosić o zgodę na instalowanie aktualizacji z Family Tracker.
-
-W każdym publicznym wydaniu GitHub w sekcji **Assets** umieść podpisany plik o dokładnej nazwie **`FamilyTracker.apk`**. Podnieś `versionCode` przy kolejnych wydaniach APK i zachowaj klucz podpisujący.
+Otwórz **Ustawienia → Urządzenia i usługi → Family Tracker → Konfiguruj**. Podaj nazwę telefonu, zatwierdź formularz i pobierz jednorazowy QR. Na telefonie wybierz **Zeskanuj kod QR** w Family Tracker. Aplikacja odczyta adres HTTPS i kod, po czym od razu spróbuje sparować telefon. QR do instalacji APK jest osobny i wskazuje na [plik w gałęzi main](https://github.com/home409ca/family-tracker/blob/main/FamilyTracker.apk).
 
 ## Rozparowanie
 
-**Rozparuj telefon** zatrzymuje udostępnianie. Integracja usuwa urządzenie i encje po zweryfikowaniu poświadczenia telefonu. Gdy połączenie przerwie się, otwórz Family Tracker i ponów rozparowanie. Wpis pozostawiony przez starszą wersję usuń z HA akcją `family_tracker.remove_device`, używając `device_id` zwróconego przez `family_tracker.list_devices`.
+Przycisk **Rozparuj telefon** zatrzymuje udostępnianie i usuwa z HA bieżące urządzenie oraz jego encje po potwierdzeniu przez serwer.
