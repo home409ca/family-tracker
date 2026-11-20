@@ -1,4 +1,6 @@
-# Family Tracker 0.2.5
+# Family Tracker
+
+Aplikacja Android 0.2.6 i integracja Home Assistant 0.2.5.
 
 Family Tracker przesyła pozycję telefonu z Androidem do Home Assistanta. Opcjonalnie udostępnia poziom baterii, stan ładowania i nazwę sieci Wi-Fi.
 
@@ -25,7 +27,8 @@ Na stronie telefonu w Home Assistancie wybierz **Poproś o aktualną lokalizacj�
 
 Dołączona APK zawiera konfigurację klienta FCM dla projektu właściciela repozytorium. Aby uruchomić FCM, umieść klucz JSON konta usługi tego projektu w `.storage/family_tracker_fcm.json` w katalogu konfiguracji HA. Następnie wpisz identyfikator tego samego projektu w **Family Tracker → ⋮ → Konfiguruj ponownie**. Prywatny klucz konta usługi przechowuj w Home Assistancie.
 
-- **Ostatni sygnał Firebase** w aplikacji pokazuje czas odebrania sygnału FCM.
+- **Firebase** w sekcji **Połączenie i raportowanie** w aplikacji pokazuje czas ostatniej udanej rejestracji telefonu w HA.
+- **Ostatni sygnał Firebase** w tej samej sekcji pokazuje czas odebrania sygnału FCM.
 - **Ostatnie potwierdzenie Firebase** w diagnostyce telefonu w HA pokazuje czas, kiedy HA otrzymał potwierdzenie z telefonu.
 - **Ostatnia lokalizacja na żądanie** w tej samej sekcji pokazuje czas odbioru pomiaru GPS wykonanego na żądanie.
 
