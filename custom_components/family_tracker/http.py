@@ -114,9 +114,8 @@ class PairingQrView(HomeAssistantView):
         if manager is None or not manager.ready:
             return web.Response(status=404, headers=headers)
         try:
-            payload = manager.pairing_downloads.take(ticket)
+            payload = manager.pairing_downloads.preview(ticket, manager.state.data["pairs"])
         except ProtocolError:
             return web.Response(status=404, headers=headers)
         image = await self.hass.async_add_executor_job(png, payload)
-        headers["Content-Disposition"] = 'attachment; filename="family-tracker-parowanie.png"'
         return web.Response(body=image, content_type="image/png", headers=headers)

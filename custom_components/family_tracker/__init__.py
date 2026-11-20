@@ -26,7 +26,7 @@ async def async_setup_entry(hass, entry):
     hass.data[DOMAIN] = manager
     try:
         await hass.config_entries.async_forward_entry_setups(
-            entry, (Platform.DEVICE_TRACKER, Platform.SENSOR, Platform.BINARY_SENSOR)
+            entry, (Platform.DEVICE_TRACKER, Platform.SENSOR, Platform.BINARY_SENSOR, Platform.BUTTON)
         )
     except BaseException:
         hass.data.pop(DOMAIN, None)
@@ -41,7 +41,7 @@ async def async_unload_entry(hass, entry):
     manager = entry.runtime_data
     manager.ready = False
     unloaded = await hass.config_entries.async_unload_platforms(
-        entry, (Platform.DEVICE_TRACKER, Platform.SENSOR, Platform.BINARY_SENSOR)
+        entry, (Platform.DEVICE_TRACKER, Platform.SENSOR, Platform.BINARY_SENSOR, Platform.BUTTON)
     )
     if unloaded:
         hass.data.pop(DOMAIN, None)

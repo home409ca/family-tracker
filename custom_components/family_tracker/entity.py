@@ -1,4 +1,4 @@
-"""Read-only HA entities derived from a Family Tracker device."""
+"""Shared HA entity behavior for a Family Tracker device."""
 
 from datetime import datetime, timezone
 

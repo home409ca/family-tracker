@@ -1,4 +1,11 @@
 {
+  "entity": {
+    "button": {
+      "request_location": {
+        "name": "Poproś o aktualną lokalizację"
+      }
+    }
+  },
   "options": {
     "step": {
       "init": {
@@ -11,7 +18,7 @@
       },
       "download": {
         "title": "Kod gotowy",
-        "description": "[Pobierz kod QR (PNG)]({qr_url}). Otwórz obraz na komputerze i zeskanuj go aplikacją Family Tracker. Kod ręczny: `{code}`. Link do pobrania działa raz, a kod jest ważny przez 5 minut."
+        "description": "Na telefonie otwórz Family Tracker i wybierz **Zeskanuj kod QR**. Kod zawiera adres Home Assistanta, jest jednorazowy i wygasa po 5 minutach.\n\n![Kod QR do parowania]({qr_url})\n\nKod do ręcznego wpisania: `{code}`."
       }
     },
     "error": {

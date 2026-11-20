@@ -1,4 +1,4 @@
-"""Produce private, short-lived downloads for the pairing form."""
+"""Produce short-lived QR previews for the pairing form."""
 
 from datetime import datetime
 from io import BytesIO
@@ -9,6 +9,7 @@ from time import time
 import qrcode
 
 from .protocol import ProtocolError, secret
+from .state import digest
 
 
 class PairingDownloads:
@@ -25,13 +26,14 @@ class PairingDownloads:
         self._downloads[ticket] = (expires, origin, pairing["code"])
         return ticket
 
-    def take(self, ticket):
+    def preview(self, ticket, pending_codes):
         try:
             secret(ticket)
-            expires, origin, code = self._downloads.pop(ticket)
+            expires, origin, code = self._downloads[ticket]
         except (KeyError, ProtocolError) as err:
             raise ProtocolError(404, "qr_missing") from err
-        if expires <= time():
+        if expires <= time() or digest(code) not in pending_codes:
+            del self._downloads[ticket]
             raise ProtocolError(404, "qr_missing")
         return json.dumps({"version": 1, "server_url": origin, "code": code}, separators=(",", ":"))
 

@@ -1,4 +1,11 @@
 {
+  "entity": {
+    "button": {
+      "request_location": {
+        "name": "Request current location"
+      }
+    }
+  },
   "options": {
     "step": {
       "init": {
@@ -11,7 +18,7 @@
       },
       "download": {
         "title": "Pairing code ready",
-        "description": "[Download QR code (PNG)]({qr_url}). Open the image on your computer and scan it with Family Tracker. Manual code: `{code}`. The download link works once and the code is valid for five minutes."
+        "description": "On the phone, open Family Tracker and select **Scan QR code**. The code includes the Home Assistant URL, can be used once and expires after five minutes.\n\n![Pairing QR code]({qr_url})\n\nManual code: `{code}`."
       }
     },
     "error": {
